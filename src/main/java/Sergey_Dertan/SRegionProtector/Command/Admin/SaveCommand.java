@@ -1,15 +1,15 @@
 package Sergey_Dertan.SRegionProtector.Command.Admin;
 
+import Sergey_Dertan.SRegionProtector.Main.PNXRegionProtectorMain;
 import Sergey_Dertan.SRegionProtector.Command.SRegionProtectorCommand;
-import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
 import cn.nukkit.command.CommandSender;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 
 public final class SaveCommand extends SRegionProtectorCommand {
 
-    private final SRegionProtectorMain pl;
+    private final PNXRegionProtectorMain pl;
 
-    public SaveCommand(SRegionProtectorMain pl) {
+    public SaveCommand(PNXRegionProtectorMain pl) {
         super("rgsave", "save");
         this.pl = pl;
 
@@ -22,7 +22,7 @@ public final class SaveCommand extends SRegionProtectorCommand {
             this.messenger.sendMessage(sender, "save.permission");
             return false;
         }
-        this.pl.asyncSave(SRegionProtectorMain.SaveType.MANUAL, sender.getName());
+        this.pl.asyncSave(PNXRegionProtectorMain.SaveType.MANUAL, sender.getName());
         return false;
     }
 }

@@ -1,13 +1,12 @@
 name: "${pom.artifactId}"
-main: Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain
+main: Main.Sergey_Dertan.SRegionProtector.PNXRegionProtectorMain
 api: [1.0.0]
 version: "${pom.version}"
-author: Sergey_Dertan
+author: Sergey_Dertan & ed_sh
 website: http://t.me/Sergey57ss
 load: STARTUP
-prefix: '§eSRegionProtector§f'
+prefix: '§ePNXRegionProtector§f'
 softdepend:
-  - EconomyAPI
   - FastAsyncWorldEdit
 permissions:
   sregionprotector.*:

@@ -24,14 +24,14 @@ public final class RegionDataObject {
     public double maxZ;
 
     /**
-     * @see Sergey_Dertan.SRegionProtector.Region.Region#name
+     * @see Region#name
      */
     @PrimaryKey
     @Persistent(name = "name")
     public String name;
 
     /**
-     * @see Sergey_Dertan.SRegionProtector.Region.Region#level
+     * @see Region#level
      */
     @Persistent(name = "level")
     public String level;

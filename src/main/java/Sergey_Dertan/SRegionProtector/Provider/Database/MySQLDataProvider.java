@@ -1,5 +1,6 @@
 package Sergey_Dertan.SRegionProtector.Provider.Database;
 
+import Sergey_Dertan.SRegionProtector.Provider.DataProvider;
 import Sergey_Dertan.SRegionProtector.Settings.MySQLSettings;
 import com.mysql.cj.jdbc.Driver;
 import org.datanucleus.metadata.PersistenceUnitMetaData;
@@ -16,7 +17,7 @@ public final class MySQLDataProvider extends DatabaseDataProvider {
     }
 
     @Override
-    public Type getType() {
-        return Type.MYSQL;
+    public DataProvider.Type getType() {
+        return DataProvider.Type.MYSQL;
     }
 }

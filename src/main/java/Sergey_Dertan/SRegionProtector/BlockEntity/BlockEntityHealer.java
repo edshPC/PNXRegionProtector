@@ -1,6 +1,6 @@
 package Sergey_Dertan.SRegionProtector.BlockEntity;
 
-import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
+import Sergey_Dertan.SRegionProtector.Main.PNXRegionProtectorMain;
 import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
@@ -30,7 +30,7 @@ public final class BlockEntityHealer extends BlockEntitySpawnable {
     public BlockEntityHealer(FullChunk chunk, CompoundTag nbt) {
         super(chunk, nbt);
         this.region = nbt.getString(REGION_TAG);
-        this.regionManager = SRegionProtectorMain.getInstance().getRegionManager();
+        this.regionManager = PNXRegionProtectorMain.getInstance().getRegionManager();
 
         if (!this.isBlockEntityValid()) {
             this.closed = true;

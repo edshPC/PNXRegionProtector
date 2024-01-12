@@ -2,11 +2,12 @@ package Sergey_Dertan.SRegionProtector.Region;
 
 import Sergey_Dertan.SRegionProtector.BlockEntity.BlockEntityHealer;
 import Sergey_Dertan.SRegionProtector.Region.Chunk.Chunk;
+import Sergey_Dertan.SRegionProtector.Utils.Tags;
+import Sergey_Dertan.SRegionProtector.Utils.Utils;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionSellFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionTeleportFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
-import Sergey_Dertan.SRegionProtector.Utils.Utils;
 import cn.nukkit.Server;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.AxisAlignedBB;
@@ -19,8 +20,6 @@ import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
-
-import static Sergey_Dertan.SRegionProtector.Utils.Tags.*;
 
 /**
  * Region manager taking care synchronization
@@ -174,14 +173,14 @@ public final class Region implements AxisAlignedBB {
     }
 
     /**
-     * @see Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionTeleportFlag
+     * @see RegionTeleportFlag
      */
     public Position getTeleportFlagPos() {
         return ((RegionTeleportFlag) this.flags[RegionFlags.FLAG_TELEPORT]).getPosition();
     }
 
     /**
-     * @see Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionSellFlag
+     * @see RegionSellFlag
      */
     public long getSellFlagPrice() {
         return ((RegionSellFlag) this.flags[RegionFlags.FLAG_SELL]).price;
@@ -236,26 +235,26 @@ public final class Region implements AxisAlignedBB {
     public Map<String, Object> toMap() throws RuntimeException {
         Map<String, Object> data = new Object2ObjectArrayMap<>();
 
-        data.put(NAME_TAG, this.name);
-        data.put(CREATOR_TAG, this.creator);
+        data.put(Tags.NAME_TAG, this.name);
+        data.put(Tags.CREATOR_TAG, this.creator);
 
-        data.put(LEVEL_TAG, this.level);
+        data.put(Tags.LEVEL_TAG, this.level);
 
-        data.put(MIN_X_TAG, this.minX);
-        data.put(MIN_Y_TAG, this.minY);
-        data.put(MIN_Z_TAG, this.minZ);
+        data.put(Tags.MIN_X_TAG, this.minX);
+        data.put(Tags.MIN_Y_TAG, this.minY);
+        data.put(Tags.MIN_Z_TAG, this.minZ);
 
-        data.put(MAX_X_TAG, this.maxX);
-        data.put(MAX_Y_TAG, this.maxY);
-        data.put(MAX_Z_TAG, this.maxZ);
+        data.put(Tags.MAX_X_TAG, this.maxX);
+        data.put(Tags.MAX_Y_TAG, this.maxY);
+        data.put(Tags.MAX_Z_TAG, this.maxZ);
 
-        data.put(PRIORITY_TAG, this.priority);
+        data.put(Tags.PRIORITY_TAG, this.priority);
 
         String owners = Utils.serializeStringArray(this.owners.toArray(new String[]{}));
         String members = Utils.serializeStringArray(this.members.toArray(new String[]{}));
 
-        data.put(OWNERS_TAG, owners);
-        data.put(MEMBERS_TAG, members);
+        data.put(Tags.OWNERS_TAG, owners);
+        data.put(Tags.MEMBERS_TAG, members);
 
         return data;
     }
@@ -266,20 +265,20 @@ public final class Region implements AxisAlignedBB {
             String name = RegionFlags.getFlagName(i);
             if (name.isEmpty() || name.replace(" ", "").isEmpty()) continue;
             Map<String, Object> flagData = new Object2ObjectArrayMap<>();
-            flagData.put(STATE_TAG, this.flags[i].state);
+            flagData.put(Tags.STATE_TAG, this.flags[i].state);
             switch (i) {
                 case RegionFlags.FLAG_TELEPORT:
                     Vector3 teleportPos = ((RegionTeleportFlag) this.flags[i]).position;
                     if (teleportPos == null) break;
                     Map<String, Object> pos = new Object2ObjectArrayMap<>();
-                    pos.put(X_TAG, teleportPos.x);
-                    pos.put(Y_TAG, teleportPos.y);
-                    pos.put(Z_TAG, teleportPos.z);
-                    pos.put(LEVEL_TAG, ((RegionTeleportFlag) this.flags[i]).level);
-                    flagData.put(POSITION_TAG, pos);
+                    pos.put(Tags.X_TAG, teleportPos.x);
+                    pos.put(Tags.Y_TAG, teleportPos.y);
+                    pos.put(Tags.Z_TAG, teleportPos.z);
+                    pos.put(Tags.LEVEL_TAG, ((RegionTeleportFlag) this.flags[i]).level);
+                    flagData.put(Tags.POSITION_TAG, pos);
                     break;
                 case RegionFlags.FLAG_SELL:
-                    flagData.put(PRICE_TAG, ((RegionSellFlag) this.flags[i]).price);
+                    flagData.put(Tags.PRICE_TAG, ((RegionSellFlag) this.flags[i]).price);
                     break;
             }
             data.put(name, flagData);

@@ -1,6 +1,8 @@
 package Sergey_Dertan.SRegionProtector.Provider.DataObject;
 
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionFlag;
+import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionSellFlag;
+import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionTeleportFlag;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 
 import javax.jdo.annotations.PersistenceCapable;
@@ -21,7 +23,7 @@ public final class FlagListDataObject {
     /**
      * region price
      *
-     * @see Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionSellFlag
+     * @see RegionSellFlag
      */
     @Persistent(name = "sell")
     public long sellData;
@@ -30,7 +32,7 @@ public final class FlagListDataObject {
      * JSON serialized Map<String, Object>
      *
      * @see com.google.gson.Gson#toJson(Object)
-     * @see Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionTeleportFlag
+     * @see RegionTeleportFlag
      * @see Converter#toDataObject(RegionFlag[], String)
      * @see Region#getTeleportFlagPos()
      */

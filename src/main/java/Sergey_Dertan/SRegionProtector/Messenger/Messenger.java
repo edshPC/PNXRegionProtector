@@ -1,6 +1,6 @@
 package Sergey_Dertan.SRegionProtector.Messenger;
 
-import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
+import Sergey_Dertan.SRegionProtector.Main.PNXRegionProtectorMain;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.command.CommandSender;
@@ -15,8 +15,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import static Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain.LANG_FOLDER;
-import static Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain.MAIN_FOLDER;
 import static Sergey_Dertan.SRegionProtector.Utils.Utils.*;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
@@ -33,8 +31,8 @@ public final class Messenger {
     @SuppressWarnings("unchecked")
     public Messenger() throws Exception {
         String lang = null;
-        if (new File(MAIN_FOLDER + "config.yml").exists()) {
-            Map<String, Object> cnf = new Config(MAIN_FOLDER + "config.yml", Config.YAML).getAll();
+        if (new File(PNXRegionProtectorMain.MAIN_FOLDER + "config.yml").exists()) {
+            Map<String, Object> cnf = new Config(PNXRegionProtectorMain.MAIN_FOLDER + "config.yml", Config.YAML).getAll();
             if (cnf.containsKey("language") && !((String) cnf.get("language")).equalsIgnoreCase("default")) {
                 lang = (String) cnf.get("language");
             }
@@ -42,13 +40,13 @@ public final class Messenger {
         if (lang == null) {
             lang = Server.getInstance().getLanguage().getLang();
         }
-        if (!resourceExists(lang + ".yml", "resources/lang", SRegionProtectorMain.class)) lang = DEFAULT_LANGUAGE;
+        if (!resourceExists(lang + ".yml", "resources/lang", PNXRegionProtectorMain.class)) lang = DEFAULT_LANGUAGE;
         this.language = lang;
-        copyResource(lang + ".yml", "resources/lang", LANG_FOLDER, SRegionProtectorMain.class);
+        copyResource(lang + ".yml", "resources/lang", PNXRegionProtectorMain.LANG_FOLDER, PNXRegionProtectorMain.class);
         DumperOptions dumperOptions = new DumperOptions();
         dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
         Yaml yaml = new Yaml(dumperOptions);
-        this.messages = new Object2ObjectArrayMap<>((Map<String, String>) yaml.loadAs(Utils.readFile(new File(LANG_FOLDER + lang + ".yml")), HashMap.class));
+        this.messages = new Object2ObjectArrayMap<>((Map<String, String>) yaml.loadAs(Utils.readFile(new File(PNXRegionProtectorMain.LANG_FOLDER + lang + ".yml")), HashMap.class));
         instance = this;
     }
 

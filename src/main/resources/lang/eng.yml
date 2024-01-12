@@ -4,6 +4,7 @@ loading.init.data-provider-type: "Data provider was set to {@type}"
 loading.success: "Loaded {@regions} regions and {@chunks} chunks"
 
 loading.error.library: "Can't load library, disabling plugin..."
+loading.warn.library: "Library was downloaded, please Restart server! Disabling plugin..."
 loading.error.folder: "Can't create folder {@path}, disabling plugin..."
 loading.error.resource: "Can't copy resource: {@err}, disabling plugin..."
 loading.error.regions: "Can't load region {@region}:"

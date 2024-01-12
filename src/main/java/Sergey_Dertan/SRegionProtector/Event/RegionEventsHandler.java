@@ -17,7 +17,6 @@ import cn.nukkit.entity.item.EntityMinecartHopper;
 import cn.nukkit.entity.item.EntityPotion;
 import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.passive.EntityAnimal;
-import cn.nukkit.entity.passive.EntityWaterAnimal;
 import cn.nukkit.entity.weather.EntityLightning;
 import cn.nukkit.event.Event;
 import cn.nukkit.event.EventHandler;
@@ -30,7 +29,7 @@ import cn.nukkit.event.level.ChunkUnloadEvent;
 import cn.nukkit.event.level.LevelLoadEvent;
 import cn.nukkit.event.player.*;
 import cn.nukkit.event.redstone.RedstoneUpdateEvent;
-import cn.nukkit.event.vehicle.VehicleDamageEvent;
+import cn.nukkit.event.vehicle.VehicleDamageByEntityEvent;
 import cn.nukkit.event.weather.LightningStrikeEvent;
 import cn.nukkit.item.ItemID;
 import cn.nukkit.level.EnumLevel;
@@ -42,8 +41,6 @@ import cn.nukkit.level.particle.Particle;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.network.protocol.DataPacket;
-import it.unimi.dsi.fastutil.objects.Object2BooleanArrayMap;
-import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 
 import java.util.*;
 
@@ -58,7 +55,7 @@ public final class RegionEventsHandler implements Listener {
     private final boolean prioritySystem;
     private final boolean showParticle;
 
-    private final Object2BooleanMap<Class> isMonster;
+    //private final Object2BooleanMap<Class> isMonster;
     private final Class monster; //mobplugin
 
     private final Pair<Vector3, Integer>[] portalBlocks;
@@ -75,7 +72,7 @@ public final class RegionEventsHandler implements Listener {
 
         this.protectedMessageType = protectedMessageType;
 
-        this.isMonster = new Object2BooleanArrayMap<>();
+        //this.isMonster = new Object2BooleanArrayMap<>();
 
         Class monster = null;
         try {
@@ -286,8 +283,7 @@ public final class RegionEventsHandler implements Listener {
         if (((EntityDamageByEntityEvent) e).getDamager() instanceof Player) {
             this.handleEvent(RegionFlags.FLAG_PVP, ent, (Player) ((EntityDamageByEntityEvent) e).getDamager(), e, false, false);
         } else if (
-                ((EntityDamageByEntityEvent) e).getDamager() instanceof EntityMob ||
-                        (this.monster != null && this.isMonster.computeIfAbsent(((EntityDamageByEntityEvent) e).getDamager().getClass(), (s) -> this.monster.isAssignableFrom(((EntityDamageByEntityEvent) e).getDamager().getClass())))
+                ((EntityDamageByEntityEvent) e).getDamager() instanceof EntityMob
         ) {
             this.handleEvent(RegionFlags.FLAG_MOB_DAMAGE, e.getEntity(), (Player) e.getEntity(), e, false, false);
         } else if (((EntityDamageByEntityEvent) e).getDamager() instanceof EntityLightning) {
@@ -306,9 +302,7 @@ public final class RegionEventsHandler implements Listener {
             return;
         }
         if (e.getEntity() instanceof EntityMob ||
-                e.getEntity() instanceof EntityAnimal ||
-                e.getEntity() instanceof EntityWaterAnimal ||
-                (this.monster != null && this.isMonster.computeIfAbsent(e.getEntity().getClass(), (s) -> this.monster.isAssignableFrom(e.getEntity().getClass())))
+                e.getEntity() instanceof EntityAnimal
         ) {
             this.handleEvent(RegionFlags.FLAG_MOB_SPAWN, e.getPosition(), ev);
             if (ev.isCancelled()) e.getEntity().close();
@@ -464,7 +458,7 @@ public final class RegionEventsHandler implements Listener {
 
     //frame item drop flag
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    public void itemFrameDropItem(ItemFrameDropItemEvent e) {
+    public void itemFrameDropItem(ItemFrameUseEvent e) {
         this.handleEvent(RegionFlags.FLAG_FRAME_ITEM_DROP, e.getBlock(), e.getPlayer(), e);
     }
 
@@ -475,7 +469,7 @@ public final class RegionEventsHandler implements Listener {
         if (e.getPortalType() != EntityPortalEnterEvent.PortalType.NETHER) return;
         Position portal;
         try {
-            portal = EnumLevel.moveToNether(e.getEntity()).floor();
+            portal = EnumLevel.convertPosBetweenNetherAndOverworld(e.getEntity()).floor();
         } catch (IllegalArgumentException ex) {
             return;
         }
@@ -522,7 +516,7 @@ public final class RegionEventsHandler implements Listener {
 
     //minecart destroy
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    public void vehicleDamage(VehicleDamageEvent e) {
+    public void vehicleDamage(VehicleDamageByEntityEvent e) {
         if (!(e.getVehicle() instanceof EntityMinecartAbstract)) return;
         this.handleEvent(RegionFlags.FLAG_MINECART_DESTROY, e.getVehicle(), e.getAttacker() instanceof Player ? (Player) e.getAttacker() : null, e, true, true);
     }

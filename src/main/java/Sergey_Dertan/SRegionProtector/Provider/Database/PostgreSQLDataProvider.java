@@ -1,5 +1,6 @@
 package Sergey_Dertan.SRegionProtector.Provider.Database;
 
+import Sergey_Dertan.SRegionProtector.Provider.DataProvider;
 import Sergey_Dertan.SRegionProtector.Settings.PostgreSQLSettings;
 import org.datanucleus.metadata.PersistenceUnitMetaData;
 import org.postgresql.Driver;
@@ -16,7 +17,7 @@ public final class PostgreSQLDataProvider extends DatabaseDataProvider {
     }
 
     @Override
-    public Type getType() {
-        return Type.POSTGRESQL;
+    public DataProvider.Type getType() {
+        return DataProvider.Type.POSTGRESQL;
     }
 }

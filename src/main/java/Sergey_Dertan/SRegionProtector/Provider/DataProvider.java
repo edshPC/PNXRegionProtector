@@ -1,8 +1,8 @@
 package Sergey_Dertan.SRegionProtector.Provider;
 
+import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Provider.DataObject.FlagListDataObject;
 import Sergey_Dertan.SRegionProtector.Provider.DataObject.RegionDataObject;
-import Sergey_Dertan.SRegionProtector.Region.Region;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package Sergey_Dertan.SRegionProtector.UI.Form.Type;
 
-import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
+import Sergey_Dertan.SRegionProtector.Main.PNXRegionProtectorMain;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
 import Sergey_Dertan.SRegionProtector.UI.Form.Element.Button;
@@ -10,7 +10,7 @@ import cn.nukkit.form.window.FormWindowSimple;
 
 final class RemoveRegionForm extends FormWindowSimple implements UIForm {
 
-    private static final transient RegionManager REGION_MANAGER = SRegionProtectorMain.getInstance().getRegionManager();
+    private static final transient RegionManager REGION_MANAGER = PNXRegionProtectorMain.getInstance().getRegionManager();
 
     private static final transient ElementButtonImageData acceptImg = new ElementButtonImageData(ElementButtonImageData.IMAGE_DATA_TYPE_PATH, "textures/ui/confirm.png");
     private static final transient ElementButtonImageData cancelImg = new ElementButtonImageData(ElementButtonImageData.IMAGE_DATA_TYPE_PATH, "textures/ui/cancel.png");

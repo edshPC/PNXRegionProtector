@@ -1,6 +1,6 @@
 package Sergey_Dertan.SRegionProtector.UI.Chest.Page;
 
-import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
+import Sergey_Dertan.SRegionProtector.Main.PNXRegionProtectorMain;
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionSellFlag;
@@ -127,8 +127,8 @@ public final class FlagsPage implements Page {
 
     public static final class FlagList extends ArrayList<FlagList.Flag> {
 
-        private static final boolean[] display = SRegionProtectorMain.getInstance().getSettings().regionSettings.display;
-        private static final boolean[] status = SRegionProtectorMain.getInstance().getSettings().regionSettings.flagsStatus;
+        private static final boolean[] display = PNXRegionProtectorMain.getInstance().getSettings().regionSettings.display;
+        private static final boolean[] status = PNXRegionProtectorMain.getInstance().getSettings().regionSettings.flagsStatus;
 
         public final Region region;
 

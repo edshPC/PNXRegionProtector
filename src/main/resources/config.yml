@@ -2,7 +2,7 @@ help-link: "If u need help with plugin u can visit wiki https://github.com/Serge
 # default means that plugin will use server`s default language
 # Supported Languages: eng(English), rus(Русский), kor(한국어)
 language: "default"
-provider: yaml
+provider: sqlite
 # when enabled only /rg and /region commands will be shown
 hide-commands: false
 # when enabled /rg and /region commands will be executed asyncly

@@ -1,14 +1,14 @@
 package Sergey_Dertan.SRegionProtector.Region;
 
 import Sergey_Dertan.SRegionProtector.BlockEntity.BlockEntityHealer;
-import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
+import Sergey_Dertan.SRegionProtector.Main.PNXRegionProtectorMain;
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
+import Sergey_Dertan.SRegionProtector.Region.Chunk.Chunk;
+import Sergey_Dertan.SRegionProtector.Region.Chunk.ChunkManager;
 import Sergey_Dertan.SRegionProtector.Provider.DataObject.Converter;
 import Sergey_Dertan.SRegionProtector.Provider.DataObject.FlagListDataObject;
 import Sergey_Dertan.SRegionProtector.Provider.DataObject.RegionDataObject;
 import Sergey_Dertan.SRegionProtector.Provider.DataProvider;
-import Sergey_Dertan.SRegionProtector.Region.Chunk.Chunk;
-import Sergey_Dertan.SRegionProtector.Region.Chunk.ChunkManager;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
 import cn.nukkit.Player;
@@ -245,7 +245,7 @@ public final class RegionManager {
         return this.regions.get(name);
     }
 
-    public synchronized void save(SRegionProtectorMain.SaveType saveType, String initiator) {
+    public synchronized void save(PNXRegionProtectorMain.SaveType saveType, String initiator) {
         AtomicInteger amount = new AtomicInteger();
         this.regions.values().stream().filter(Region::needUpdate).forEach(region -> {
             synchronized (region.lock) {
@@ -267,7 +267,7 @@ public final class RegionManager {
         }
     }
 
-    public synchronized void save(SRegionProtectorMain.SaveType saveType) {
+    public synchronized void save(PNXRegionProtectorMain.SaveType saveType) {
         this.save(saveType, null);
     }
 

@@ -1,6 +1,6 @@
 package Sergey_Dertan.SRegionProtector.Utils;
 
-import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
+import Sergey_Dertan.SRegionProtector.Main.PNXRegionProtectorMain;
 import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Region.RegionGroup;
@@ -11,7 +11,7 @@ public abstract class PlaceholdersLoader {
 
     static {
         PlaceholderAPI papi = PlaceholderAPI.getInstance();
-        SRegionProtectorMain main = SRegionProtectorMain.getInstance();
+        PNXRegionProtectorMain main = PNXRegionProtectorMain.getInstance();
 
         papi.builder("srp_current_region", String.class).visitorLoader(entry -> {
             Region region = main.getChunkManager().getRegion(entry.getPlayer(), entry.getPlayer().level.getName());

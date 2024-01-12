@@ -1,9 +1,9 @@
 package Sergey_Dertan.SRegionProtector.Command.Manage;
 
-import Sergey_Dertan.SRegionProtector.Command.SRegionProtectorCommand;
 import Sergey_Dertan.SRegionProtector.Region.Chunk.ChunkManager;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
+import Sergey_Dertan.SRegionProtector.Command.SRegionProtectorCommand;
 import Sergey_Dertan.SRegionProtector.UI.Chest.ChestUIManager;
 import Sergey_Dertan.SRegionProtector.UI.Form.FormUIManager;
 import Sergey_Dertan.SRegionProtector.UI.UIType;

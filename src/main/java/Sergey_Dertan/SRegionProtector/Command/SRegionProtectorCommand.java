@@ -1,6 +1,6 @@
 package Sergey_Dertan.SRegionProtector.Command;
 
-import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
+import Sergey_Dertan.SRegionProtector.Main.PNXRegionProtectorMain;
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import cn.nukkit.command.Command;
 import cn.nukkit.command.PluginIdentifiableCommand;
@@ -26,7 +26,7 @@ public abstract class SRegionProtectorCommand extends Command implements PluginI
     }
 
     @Override
-    public SRegionProtectorMain getPlugin() {
-        return SRegionProtectorMain.getInstance();
+    public PNXRegionProtectorMain getPlugin() {
+        return PNXRegionProtectorMain.getInstance();
     }
 }

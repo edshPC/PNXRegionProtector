@@ -1,8 +1,9 @@
 package Sergey_Dertan.SRegionProtector.Command.Manage;
 
-import Sergey_Dertan.SRegionProtector.Command.SRegionProtectorCommand;
+import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
+import Sergey_Dertan.SRegionProtector.Command.SRegionProtectorCommand;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParamType;
@@ -10,8 +11,6 @@ import cn.nukkit.command.data.CommandParameter;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 
 import java.util.Map;
-
-import static Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags.FLAG_TELEPORT;
 
 public final class RegionTeleportCommand extends SRegionProtectorCommand {
 
@@ -55,7 +54,7 @@ public final class RegionTeleportCommand extends SRegionProtectorCommand {
             this.messenger.sendMessage(sender, "command.teleport.permission");
             return false;
         }
-        if (!region.getFlagState(FLAG_TELEPORT) || region.getTeleportFlagPos() == null) {
+        if (!region.getFlagState(RegionFlags.FLAG_TELEPORT) || region.getTeleportFlagPos() == null) {
             this.messenger.sendMessage(sender, "command.teleport.teleport-disabled");
             return false;
         }

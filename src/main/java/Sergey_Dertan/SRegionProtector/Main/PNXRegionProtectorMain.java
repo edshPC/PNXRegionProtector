@@ -1,23 +1,24 @@
 package Sergey_Dertan.SRegionProtector.Main;
 
+import Sergey_Dertan.SRegionProtector.Command.Creation.*;
+import Sergey_Dertan.SRegionProtector.Command.Manage.*;
+import Sergey_Dertan.SRegionProtector.Event.NotifierEventHandler;
+import Sergey_Dertan.SRegionProtector.Event.RegionEventsHandler;
+import cn.nukkit.blockentity.BlockEntity;
+import cn.nukkit.command.Command;
+import cn.nukkit.plugin.LibraryLoadException;
+import cn.nukkit.plugin.PluginBase;
+import cn.nukkit.utils.TextFormat;
+import cn.nukkit.utils.ThreadCache;
+import cn.nukkit.utils.Utils;
 import Sergey_Dertan.SRegionProtector.BlockEntity.BlockEntityHealer;
 import Sergey_Dertan.SRegionProtector.Command.Admin.MigrateCommand;
 import Sergey_Dertan.SRegionProtector.Command.Admin.SaveCommand;
-import Sergey_Dertan.SRegionProtector.Command.Creation.*;
-import Sergey_Dertan.SRegionProtector.Command.Manage.*;
 import Sergey_Dertan.SRegionProtector.Command.Manage.Group.AddMemberCommand;
 import Sergey_Dertan.SRegionProtector.Command.Manage.Group.AddOwnerCommand;
 import Sergey_Dertan.SRegionProtector.Command.Manage.Group.RemoveMemberCommand;
 import Sergey_Dertan.SRegionProtector.Command.Manage.Group.RemoveOwnerCommand;
-import Sergey_Dertan.SRegionProtector.Command.Manage.Purchase.BuyRegionCommand;
-import Sergey_Dertan.SRegionProtector.Command.Manage.Purchase.RegionPriceCommand;
-import Sergey_Dertan.SRegionProtector.Command.Manage.Purchase.RegionRemoveFromSaleCommand;
-import Sergey_Dertan.SRegionProtector.Command.Manage.Purchase.RegionSellCommand;
 import Sergey_Dertan.SRegionProtector.Command.RegionCommand;
-import Sergey_Dertan.SRegionProtector.Economy.AbstractEconomy;
-import Sergey_Dertan.SRegionProtector.Economy.OneBoneEconomyAPI;
-import Sergey_Dertan.SRegionProtector.Event.NotifierEventHandler;
-import Sergey_Dertan.SRegionProtector.Event.RegionEventsHandler;
 import Sergey_Dertan.SRegionProtector.Event.SelectorEventsHandler;
 import Sergey_Dertan.SRegionProtector.Event.UIEventsHandler;
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
@@ -31,15 +32,7 @@ import Sergey_Dertan.SRegionProtector.Region.Chunk.ChunkManager;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
 import Sergey_Dertan.SRegionProtector.Region.Selector.RegionSelector;
 import Sergey_Dertan.SRegionProtector.Settings.Settings;
-import cn.nukkit.Server;
-import cn.nukkit.blockentity.BlockEntity;
-import cn.nukkit.command.Command;
-import cn.nukkit.plugin.LibraryLoadException;
-import cn.nukkit.plugin.LibraryLoader;
-import cn.nukkit.plugin.PluginBase;
-import cn.nukkit.utils.TextFormat;
-import cn.nukkit.utils.ThreadCache;
-import cn.nukkit.utils.Utils;
+import Sergey_Dertan.SRegionProtector.Utils.LibraryLoader;
 
 import java.io.File;
 import java.util.Map;
@@ -52,17 +45,17 @@ import static Sergey_Dertan.SRegionProtector.Utils.Utils.compareVersions;
 import static Sergey_Dertan.SRegionProtector.Utils.Utils.httpGetRequestJson;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
-public final class SRegionProtectorMain extends PluginBase {
+public final class PNXRegionProtectorMain extends PluginBase {
 
-    public static final String MAIN_FOLDER = Server.getInstance().getDataPath() + "Sergey_Dertan_Plugins/SRegionProtector/";
-    public static final String REGIONS_FOLDER = MAIN_FOLDER + "Regions/";
-    public static final String FLAGS_FOLDER = MAIN_FOLDER + "Flags/";
-    public static final String LANG_FOLDER = MAIN_FOLDER + "Lang/";
-    public static final String DB_FOLDER = MAIN_FOLDER + "DB/";
+    public static String MAIN_FOLDER;
+    public static String REGIONS_FOLDER;
+    public static String FLAGS_FOLDER;
+    public static String LANG_FOLDER;
+    public static String DB_FOLDER;
 
     public static final String VERSION_URL = "https://api.github.com/repos/SergeyDertan/SRegionProtector/releases/latest";
 
-    private static SRegionProtectorMain instance;
+    private static PNXRegionProtectorMain instance;
 
     private final ExecutorService save = Executors.newFixedThreadPool(1);
 
@@ -76,20 +69,30 @@ public final class SRegionProtectorMain extends PluginBase {
     private Messenger messenger;
     private RegionCommand mainCommand;
 
-    public static SRegionProtectorMain getInstance() {
-        return SRegionProtectorMain.instance;
+    public static PNXRegionProtectorMain getInstance() {
+        return PNXRegionProtectorMain.instance;
     }
 
     @Override
     public void onEnable() {
+        MAIN_FOLDER = getDataFolder().getPath() + "/";
+        REGIONS_FOLDER = MAIN_FOLDER + "Regions/";
+        FLAGS_FOLDER = MAIN_FOLDER + "Flags/";
+        LANG_FOLDER = MAIN_FOLDER + "Lang/";
+        DB_FOLDER = MAIN_FOLDER + "DB/";
+
         if (!this.createDirectories()) return;
         if (!this.initMessenger()) return;
 
-        if (!this.loadLibraries()) return;
+        boolean libsLoaded = this.loadLibraries();
 
         if (!this.initSettings()) return;
 
-        if (!this.initDataProvider()) return;
+        if (!libsLoaded | !this.initDataProvider()) {
+            this.getPluginLoader().disablePlugin(this);
+            getServer().shutdown();
+            return;
+        }
 
         this.initChunks();
 
@@ -122,13 +125,14 @@ public final class SRegionProtectorMain extends PluginBase {
     private boolean initDataProvider() {
         try {
             this.provider = this.getProviderInstance(this.settings.provider);
+            if(this.provider == null) return false;
             this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.data-provider-type", "@type", this.settings.provider.name()));
             return true;
         } catch (RuntimeException e) {
             this.getLogger().alert(TextFormat.RED + this.messenger.getMessage("loading.error.data-provider-error", new String[]{"@err", "@provider"}, new String[]{e.getMessage(), this.settings.provider.name()}));
             this.forceShutdown = true;
             this.getLogger().alert(Utils.getExceptionMessage(e));
-            this.getPluginLoader().disablePlugin(this);
+            //this.getPluginLoader().disablePlugin(this);
             return false;
         }
     }
@@ -149,10 +153,10 @@ public final class SRegionProtectorMain extends PluginBase {
     private boolean createDirectories() {
         return
                 this.createFolder(MAIN_FOLDER) &&
-                        this.createFolder(REGIONS_FOLDER) &&
-                        this.createFolder(FLAGS_FOLDER) &&
-                        this.createFolder(LANG_FOLDER) &&
-                        this.createFolder(DB_FOLDER);
+                this.createFolder(REGIONS_FOLDER) &&
+                this.createFolder(FLAGS_FOLDER) &&
+                this.createFolder(LANG_FOLDER) &&
+                this.createFolder(DB_FOLDER);
     }
 
     private boolean createFolder(String path) {
@@ -252,14 +256,11 @@ public final class SRegionProtectorMain extends PluginBase {
         this.mainCommand = new RegionCommand(this.settings.asyncCommands, this.settings.asyncCommandsThreads, this.settings.withNemisys);
         this.getServer().getCommandMap().register("sregionprotector", this.mainCommand);
 
-        AbstractEconomy economy = null;
-        if (this.getServer().getPluginManager().getPlugin("EconomyAPI") != null) economy = new OneBoneEconomyAPI();
-
         this.registerCommand(new Pos1Command(this.regionSelector));
 
         this.registerCommand(new Pos2Command(this.regionSelector));
 
-        this.registerCommand(new CreateRegionCommand(this.regionSelector, this.regionManager, this.settings.regionSettings, this.settings.regionCreationPrice ? economy : null, this.settings.pricePerBlock));
+        this.registerCommand(new CreateRegionCommand(this.regionSelector, this.regionManager, this.settings.regionSettings));
 
         this.registerCommand(new GetWandCommand());
 
@@ -293,14 +294,6 @@ public final class SRegionProtectorMain extends PluginBase {
 
         this.registerCommand(new RegionExpandCommand(this.regionSelector));
 
-        this.registerCommand(new BuyRegionCommand(this.regionManager, economy));
-
-        this.registerCommand(new RegionPriceCommand(this.regionManager));
-
-        this.registerCommand(new RegionSellCommand(this.regionManager));
-
-        this.registerCommand(new RegionRemoveFromSaleCommand(this.regionManager));
-
         this.registerCommand(new LPos1Command(this.regionSelector, this.settings.lposMaxRadius));
 
         this.registerCommand(new LPos2Command(this.regionSelector, this.settings.lposMaxRadius));
@@ -333,34 +326,55 @@ public final class SRegionProtectorMain extends PluginBase {
     }
 
     private boolean loadLibraries() {
+
         try {
-            LibraryLoader.load("org.datanucleus:javax.jdo:3.2.0-m11");
-            LibraryLoader.load("org.datanucleus:datanucleus-core:5.2.0-release");
+            if(LibraryLoader.load("org.datanucleus:javax.jdo:3.2.1") |
+               LibraryLoader.load("org.datanucleus:datanucleus-core:6.0.3")) {
+                getLogger().warning(this.messenger.getMessage("loading.warn.library"));
+                return false;
+            }
+
         } catch (LibraryLoadException e) {
             this.getLogger().alert(TextFormat.RED + this.messenger.getMessage("loading.error.library"));
             this.getLogger().alert(Utils.getExceptionMessage(e));
             this.forceShutdown = true;
-            this.getPluginLoader().disablePlugin(this);
+            //this.getPluginLoader().disablePlugin(this);
             return false;
         }
         return true;
     }
 
-    private void loadMySQLLibraries() {
-        LibraryLoader.load("mysql:mysql-connector-java:8.0.15");
+    private boolean loadMySQLLibraries() {
+        if(LibraryLoader.load("mysql:mysql-connector-java:8.0.33")) {
+            getLogger().warning(this.messenger.getMessage("loading.warn.library"));
+            return false;
+        }
+        return true;
     }
 
-    private void loadDBLibraries() {
-        LibraryLoader.load("org.datanucleus:datanucleus-api-jdo:5.2.0-release");
-        LibraryLoader.load("org.datanucleus:datanucleus-rdbms:5.2.0-release");
+    private boolean loadDBLibraries() {
+        if(LibraryLoader.load("org.datanucleus:datanucleus-api-jdo:6.0.1") |
+        LibraryLoader.load("org.datanucleus:datanucleus-rdbms:6.0.3")) {
+            getLogger().warning(this.messenger.getMessage("loading.warn.library"));
+            return false;
+        }
+        return true;
     }
 
-    private void loadSQLiteLibraries() {
-        LibraryLoader.load("org.xerial:sqlite-jdbc:3.27.2.1");
+    private boolean loadSQLiteLibraries() {
+        if(LibraryLoader.load("org.xerial:sqlite-jdbc:3.41.2.2")) {
+            getLogger().warning(this.messenger.getMessage("loading.warn.library"));
+            return false;
+        }
+        return true;
     }
 
-    private void loadPostgreSQLLibraries() {
-        LibraryLoader.load("postgresql:postgresql:9.1-901-1.jdbc4");
+    private boolean loadPostgreSQLLibraries() {
+        if(LibraryLoader.load("org.postgresql:postgresql:42.7.1")) {
+            getLogger().warning(this.messenger.getMessage("loading.warn.library"));
+            return false;
+        }
+        return true;
     }
 
     private void shutdownExecutors() {
@@ -391,16 +405,13 @@ public final class SRegionProtectorMain extends PluginBase {
                 case YAML:
                     return new YAMLDataProvider(this.getLogger(), this.settings.multithreadedDataLoading, this.settings.dataLoadingThreads);
                 case MYSQL:
-                    this.loadMySQLLibraries();
-                    this.loadDBLibraries();
+                    if(!loadMySQLLibraries() | !loadDBLibraries()) return null;
                     return new MySQLDataProvider(this.settings.mySQLSettings);
                 case SQLite:
-                    this.loadSQLiteLibraries();
-                    this.loadDBLibraries();
+                    if(!loadSQLiteLibraries() | !loadDBLibraries()) return null;
                     return new SQLiteDataProvider(this.settings.sqliteSettngs);
                 case POSTGRESQL:
-                    this.loadPostgreSQLLibraries();
-                    this.loadDBLibraries();
+                    if(!loadPostgreSQLLibraries() | !loadDBLibraries()) return null;
                     return new PostgreSQLDataProvider(this.settings.postgreSQLSettings);
                 default:
                     throw new RuntimeException("Unsupported provider " + type.name());

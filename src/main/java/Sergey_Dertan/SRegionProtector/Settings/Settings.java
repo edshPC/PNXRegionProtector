@@ -1,17 +1,16 @@
 package Sergey_Dertan.SRegionProtector.Settings;
 
-import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
+import Sergey_Dertan.SRegionProtector.Main.PNXRegionProtectorMain;
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Provider.DataProvider;
 import Sergey_Dertan.SRegionProtector.UI.UIType;
+import Sergey_Dertan.SRegionProtector.Utils.Utils;
 import cn.nukkit.block.Block;
 import cn.nukkit.item.Item;
 import cn.nukkit.utils.Config;
 
 import java.util.Map;
 
-import static Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain.DB_FOLDER;
-import static Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain.MAIN_FOLDER;
 import static Sergey_Dertan.SRegionProtector.Utils.Utils.copyResource;
 
 public final class Settings {
@@ -63,11 +62,11 @@ public final class Settings {
     public final double pricePerBlock;
 
     public Settings() throws Exception {
-        copyResource("config.yml", "resources/", MAIN_FOLDER, SRegionProtectorMain.class);
-        copyResource("mysql.yml", "resources/db", DB_FOLDER, SRegionProtectorMain.class);
-        copyResource("postgresql.yml", "resources/db", DB_FOLDER, SRegionProtectorMain.class);
-        copyResource("sqlite.yml", "resources/db", DB_FOLDER, SRegionProtectorMain.class);
-        copyResource("region-settings.yml", "resources/", MAIN_FOLDER, SRegionProtectorMain.class);
+        Utils.copyResource("config.yml", "resources/", PNXRegionProtectorMain.MAIN_FOLDER, PNXRegionProtectorMain.class);
+        Utils.copyResource("mysql.yml", "resources/db", PNXRegionProtectorMain.DB_FOLDER, PNXRegionProtectorMain.class);
+        Utils.copyResource("postgresql.yml", "resources/db", PNXRegionProtectorMain.DB_FOLDER, PNXRegionProtectorMain.class);
+        Utils.copyResource("sqlite.yml", "resources/db", PNXRegionProtectorMain.DB_FOLDER, PNXRegionProtectorMain.class);
+        Utils.copyResource("region-settings.yml", "resources/", PNXRegionProtectorMain.MAIN_FOLDER, PNXRegionProtectorMain.class);
 
         Map<String, Object> config = this.getConfig();
 
@@ -139,15 +138,15 @@ public final class Settings {
 
         this.wandItem = Item.get(id, meta);
 
-        this.mySQLSettings = new MySQLSettings(new Config(DB_FOLDER + "mysql.yml", Config.YAML).getAll());
-        this.postgreSQLSettings = new PostgreSQLSettings(new Config(DB_FOLDER + "postgresql.yml", Config.YAML).getAll());
-        this.sqliteSettngs = new SQLiteSettings(new Config(DB_FOLDER + "sqlite.yml", Config.YAML).getString("database-file"));
+        this.mySQLSettings = new MySQLSettings(new Config(PNXRegionProtectorMain.DB_FOLDER + "mysql.yml", Config.YAML).getAll());
+        this.postgreSQLSettings = new PostgreSQLSettings(new Config(PNXRegionProtectorMain.DB_FOLDER + "postgresql.yml", Config.YAML).getAll());
+        this.sqliteSettngs = new SQLiteSettings(new Config(PNXRegionProtectorMain.DB_FOLDER + "sqlite.yml", Config.YAML).getString("database-file"));
 
-        this.regionSettings = new RegionSettings(config, new Config(MAIN_FOLDER + "region-settings.yml", Config.YAML).getAll());
+        this.regionSettings = new RegionSettings(config, new Config(PNXRegionProtectorMain.MAIN_FOLDER + "region-settings.yml", Config.YAML).getAll());
     }
 
     @SuppressWarnings("WeakerAccess")
     public Map<String, Object> getConfig() {
-        return new Config(MAIN_FOLDER + "config.yml", Config.YAML).getAll();
+        return new Config(PNXRegionProtectorMain.MAIN_FOLDER + "config.yml", Config.YAML).getAll();
     }
 }

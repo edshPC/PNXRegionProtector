@@ -1,5 +1,6 @@
 package Sergey_Dertan.SRegionProtector.Provider.Database;
 
+import Sergey_Dertan.SRegionProtector.Provider.DataProvider;
 import Sergey_Dertan.SRegionProtector.Settings.SQLiteSettings;
 import org.datanucleus.metadata.PersistenceUnitMetaData;
 import org.sqlite.JDBC;
@@ -16,7 +17,7 @@ public final class SQLiteDataProvider extends DatabaseDataProvider {
     }
 
     @Override
-    public Type getType() {
-        return Type.SQLite;
+    public DataProvider.Type getType() {
+        return DataProvider.Type.SQLite;
     }
 }

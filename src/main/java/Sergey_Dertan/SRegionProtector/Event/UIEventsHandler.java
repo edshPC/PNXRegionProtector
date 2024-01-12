@@ -1,11 +1,11 @@
 package Sergey_Dertan.SRegionProtector.Event;
 
+import Sergey_Dertan.SRegionProtector.Utils.Tags;
 import Sergey_Dertan.SRegionProtector.UI.Chest.ChestUIManager;
 import Sergey_Dertan.SRegionProtector.UI.Chest.UIInventory;
 import Sergey_Dertan.SRegionProtector.UI.Form.FormUIManager;
 import Sergey_Dertan.SRegionProtector.UI.Form.Type.UIForm;
 import Sergey_Dertan.SRegionProtector.UI.UIType;
-import Sergey_Dertan.SRegionProtector.Utils.Tags;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.inventory.InventoryCloseEvent;
