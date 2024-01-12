@@ -256,7 +256,8 @@ public final class RegionManager {
         });
         switch (saveType) {
             case AUTO:
-                this.logger.info(TextFormat.GREEN + this.messenger.getMessage("regions-auto-save", "@amount", amount.toString()));
+                if(amount.get()>0)
+                    this.logger.info(TextFormat.GREEN + this.messenger.getMessage("regions-auto-save", "@amount", amount.toString()));
                 break;
             case DISABLING:
                 this.logger.info(TextFormat.GREEN + this.messenger.getMessage("disabling.regions-saved", "@amount", Integer.toString(this.regions.size())));

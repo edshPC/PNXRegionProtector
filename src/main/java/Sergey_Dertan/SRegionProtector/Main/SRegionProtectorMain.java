@@ -229,7 +229,7 @@ public final class SRegionProtectorMain extends PluginBase {
     public synchronized void save(SaveType saveType, String initiator) {
         switch (saveType) {
             case AUTO:
-                this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("auto-save-start"));
+                //this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("auto-save-start"));
                 break;
             case MANUAL:
                 this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("manual-save-start", "@initiator", initiator));
