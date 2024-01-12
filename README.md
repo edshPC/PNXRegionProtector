@@ -1,9 +1,12 @@
-# SRegionProtector
+# PNXRegionProtector
+An adapted release of [SRegionProtector](https://github.com/SergeyDertan/SRegionProtector) for [PowerNukkitX](https://github.com/PowerNukkitX/PowerNukkitX).
+
+Currently have some problems with database provider external libs (datanucleus) so only YAML storage is allowed.
+Will be added through DBLib plugin in future.
+
 SRegionProtector is a nukkit plugin that allows players to protect their regions.
 ## Download
-* [NukkitX.com](https://nukkitx.com/resources/sregionprotector.164/)
-* [GoogleDrive](https://drive.google.com/file/d/17y1987s7YitfpL2mGQ9ele3dACSSFwea/view?usp=sharing)
-* [All versions](https://drive.google.com/drive/folders/1Z98RAPGY-7NK49ktsBYkZgafUB50r7NC?usp=sharing)
+* [Release](https://github.com/edshPC/PNXRegionProtector/releases/latest)
 ## Features
 * Chest and form UI with custom page support
 * API for another plugins
