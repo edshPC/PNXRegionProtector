@@ -1,6 +1,6 @@
 package Sergey_Dertan.SRegionProtector.UI.Chest.Page;
 
-import Sergey_Dertan.SRegionProtector.Main.PNXRegionProtectorMain;
+import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 public final class MembersPage implements Page {
 
-    private final RegionManager regionManager = PNXRegionProtectorMain.getInstance().getRegionManager();
+    private final RegionManager regionManager = SRegionProtectorMain.getInstance().getRegionManager();
 
     MembersPage() {
     }

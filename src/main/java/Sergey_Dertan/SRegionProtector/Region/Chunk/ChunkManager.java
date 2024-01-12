@@ -1,6 +1,6 @@
 package Sergey_Dertan.SRegionProtector.Region.Chunk;
 
-import Sergey_Dertan.SRegionProtector.Main.PNXRegionProtectorMain;
+import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import cn.nukkit.Server;
@@ -38,7 +38,7 @@ public final class ChunkManager {
 
     public void init(boolean emptyChunksAutoRemoving, int removePeriod) {
         if (!emptyChunksAutoRemoving) return;
-        Server.getInstance().getScheduler().scheduleDelayedRepeatingTask(PNXRegionProtectorMain.getInstance(), this::removeEmptyChunks, removePeriod * 20, removePeriod * 20, true);
+        Server.getInstance().getScheduler().scheduleDelayedRepeatingTask(SRegionProtectorMain.getInstance(), this::removeEmptyChunks, removePeriod * 20, removePeriod * 20, true);
     }
 
     public int getChunkAmount() {

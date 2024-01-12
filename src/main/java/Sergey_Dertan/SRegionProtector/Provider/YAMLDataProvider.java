@@ -1,6 +1,6 @@
 package Sergey_Dertan.SRegionProtector.Provider;
 
-import Sergey_Dertan.SRegionProtector.Main.PNXRegionProtectorMain;
+import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Utils.Tags;
@@ -43,7 +43,7 @@ public final class YAMLDataProvider implements DataProvider {
 
     @Override
     public RegionDataObject loadRegion(String name) {
-        return Converter.toRegionDataObject(new Config(PNXRegionProtectorMain.REGIONS_FOLDER + REGION_FILE_NAME.replace("{@region-name}", name), Config.YAML).getAll());
+        return Converter.toRegionDataObject(new Config(SRegionProtectorMain.REGIONS_FOLDER + REGION_FILE_NAME.replace("{@region-name}", name), Config.YAML).getAll());
     }
 
     @Override
@@ -52,7 +52,7 @@ public final class YAMLDataProvider implements DataProvider {
         if (this.multithreadedDataLoading) {
             ExecutorService executor = Executors.newFixedThreadPool(this.threads);
             List<List<RegionDataObject>> result = new ArrayList<>();
-            Utils.sliceArray(new File(PNXRegionProtectorMain.REGIONS_FOLDER).listFiles((dir, name) -> name.endsWith(".yml")), this.threads, false).forEach(s -> {
+            Utils.sliceArray(new File(SRegionProtectorMain.REGIONS_FOLDER).listFiles((dir, name) -> name.endsWith(".yml")), this.threads, false).forEach(s -> {
                 List<RegionDataObject> res = new ArrayList<>();
                 result.add(res);
                 executor.execute(() ->
@@ -79,7 +79,7 @@ public final class YAMLDataProvider implements DataProvider {
 
         List<RegionDataObject> result = new ArrayList<>();
 
-        Arrays.stream(new File(PNXRegionProtectorMain.REGIONS_FOLDER).listFiles((dir, name) -> name.endsWith(".yml"))).filter(File::isFile).forEach(file -> {
+        Arrays.stream(new File(SRegionProtectorMain.REGIONS_FOLDER).listFiles((dir, name) -> name.endsWith(".yml"))).filter(File::isFile).forEach(file -> {
             Object o = new Config(file.getAbsolutePath(), Config.YAML).get("data");
             try {
                 if (o != null) result.add(Converter.toRegionDataObject((Map<String, Object>) o));
@@ -93,14 +93,14 @@ public final class YAMLDataProvider implements DataProvider {
     @Override
     @SuppressWarnings("unchecked")
     public FlagListDataObject loadFlags(String region) {
-        Config file = new Config(PNXRegionProtectorMain.FLAGS_FOLDER + FLAG_LIST_FILE_NAME.replace("{@region-name}", region), Config.YAML);
+        Config file = new Config(SRegionProtectorMain.FLAGS_FOLDER + FLAG_LIST_FILE_NAME.replace("{@region-name}", region), Config.YAML);
         return Converter.toDataObject((Map<String, Map<String, Object>>) file.get(Tags.DATA_TAG));
     }
 
     @Override
     public void saveFlags(Region region) {
         synchronized (region.lock) {
-            Config file = new Config(PNXRegionProtectorMain.FLAGS_FOLDER + FLAG_LIST_FILE_NAME.replace("{@region-name}", region.name), Config.YAML);
+            Config file = new Config(SRegionProtectorMain.FLAGS_FOLDER + FLAG_LIST_FILE_NAME.replace("{@region-name}", region.name), Config.YAML);
             file.set(Tags.DATA_TAG, region.flagsToMap());
             file.save();
         }
@@ -110,7 +110,7 @@ public final class YAMLDataProvider implements DataProvider {
     public void saveRegion(Region region) {
         try {
             synchronized (region.lock) {
-                Config file = new Config(PNXRegionProtectorMain.REGIONS_FOLDER + REGION_FILE_NAME.replace("{@region-name}", region.name), Config.YAML);
+                Config file = new Config(SRegionProtectorMain.REGIONS_FOLDER + REGION_FILE_NAME.replace("{@region-name}", region.name), Config.YAML);
                 file.set(Tags.DATA_TAG, region.toMap());
                 file.save();
             }
@@ -123,13 +123,13 @@ public final class YAMLDataProvider implements DataProvider {
     @Override
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void removeRegion(Region region) {
-        new File(PNXRegionProtectorMain.REGIONS_FOLDER + REGION_FILE_NAME.replace("{@region-name}", region.name)).delete();
+        new File(SRegionProtectorMain.REGIONS_FOLDER + REGION_FILE_NAME.replace("{@region-name}", region.name)).delete();
     }
 
     @Override
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void removeFlags(Region region) {
-        new File(PNXRegionProtectorMain.FLAGS_FOLDER + REGION_FILE_NAME.replace("{@region-name}", region.name)).delete();
+        new File(SRegionProtectorMain.FLAGS_FOLDER + REGION_FILE_NAME.replace("{@region-name}", region.name)).delete();
     }
 
     @Override

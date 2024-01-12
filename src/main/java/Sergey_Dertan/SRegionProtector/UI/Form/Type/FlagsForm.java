@@ -1,6 +1,6 @@
 package Sergey_Dertan.SRegionProtector.UI.Form.Type;
 
-import Sergey_Dertan.SRegionProtector.Main.PNXRegionProtectorMain;
+import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
 import Sergey_Dertan.SRegionProtector.Region.Region;
@@ -14,8 +14,8 @@ import java.util.Arrays;
 final class FlagsForm extends FormWindowSimple implements UIForm {
 
     private static final transient String[] ICONS = new String[RegionFlags.FLAG_AMOUNT];
-    private static final transient boolean[] flagStatus = PNXRegionProtectorMain.getInstance().getSettings().regionSettings.flagsStatus;
-    private static final transient boolean[] display = PNXRegionProtectorMain.getInstance().getSettings().regionSettings.display;
+    private static final transient boolean[] flagStatus = SRegionProtectorMain.getInstance().getSettings().regionSettings.flagsStatus;
+    private static final transient boolean[] display = SRegionProtectorMain.getInstance().getSettings().regionSettings.display;
 
     static {
         Arrays.fill(ICONS, "textures/misc/missing_texture.png");

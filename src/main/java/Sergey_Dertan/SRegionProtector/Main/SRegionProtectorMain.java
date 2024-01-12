@@ -45,7 +45,7 @@ import static Sergey_Dertan.SRegionProtector.Utils.Utils.compareVersions;
 import static Sergey_Dertan.SRegionProtector.Utils.Utils.httpGetRequestJson;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
-public final class PNXRegionProtectorMain extends PluginBase {
+public final class SRegionProtectorMain extends PluginBase {
 
     public static String MAIN_FOLDER;
     public static String REGIONS_FOLDER;
@@ -55,7 +55,7 @@ public final class PNXRegionProtectorMain extends PluginBase {
 
     public static final String VERSION_URL = "https://api.github.com/repos/SergeyDertan/SRegionProtector/releases/latest";
 
-    private static PNXRegionProtectorMain instance;
+    private static SRegionProtectorMain instance;
 
     private final ExecutorService save = Executors.newFixedThreadPool(1);
 
@@ -69,8 +69,8 @@ public final class PNXRegionProtectorMain extends PluginBase {
     private Messenger messenger;
     private RegionCommand mainCommand;
 
-    public static PNXRegionProtectorMain getInstance() {
-        return PNXRegionProtectorMain.instance;
+    public static SRegionProtectorMain getInstance() {
+        return SRegionProtectorMain.instance;
     }
 
     @Override
@@ -84,13 +84,11 @@ public final class PNXRegionProtectorMain extends PluginBase {
         if (!this.createDirectories()) return;
         if (!this.initMessenger()) return;
 
-        boolean libsLoaded = this.loadLibraries();
-
         if (!this.initSettings()) return;
 
-        if (!libsLoaded | !this.initDataProvider()) {
+        if (!this.loadLibraries() | !this.initDataProvider()) {
+            forceShutdown = true;
             this.getPluginLoader().disablePlugin(this);
-            getServer().shutdown();
             return;
         }
 
@@ -328,8 +326,9 @@ public final class PNXRegionProtectorMain extends PluginBase {
     private boolean loadLibraries() {
 
         try {
-            if(LibraryLoader.load("org.datanucleus:javax.jdo:3.2.1") |
-               LibraryLoader.load("org.datanucleus:datanucleus-core:6.0.3")) {
+            if(!(settings.provider.equals(DataProvider.Type.YAML)) &&
+                    LibraryLoader.load("org.datanucleus:javax.jdo:3.2.1") |
+               LibraryLoader.load("org.datanucleus:datanucleus-core:6.0.1")) {
                 getLogger().warning(this.messenger.getMessage("loading.warn.library"));
                 return false;
             }
@@ -354,7 +353,7 @@ public final class PNXRegionProtectorMain extends PluginBase {
 
     private boolean loadDBLibraries() {
         if(LibraryLoader.load("org.datanucleus:datanucleus-api-jdo:6.0.1") |
-        LibraryLoader.load("org.datanucleus:datanucleus-rdbms:6.0.3")) {
+        LibraryLoader.load("org.datanucleus:datanucleus-rdbms:6.0.1")) {
             getLogger().warning(this.messenger.getMessage("loading.warn.library"));
             return false;
         }
@@ -362,7 +361,7 @@ public final class PNXRegionProtectorMain extends PluginBase {
     }
 
     private boolean loadSQLiteLibraries() {
-        if(LibraryLoader.load("org.xerial:sqlite-jdbc:3.41.2.2")) {
+        if(LibraryLoader.load("org.xerial:sqlite-jdbc:3.44.0.0")) {
             getLogger().warning(this.messenger.getMessage("loading.warn.library"));
             return false;
         }

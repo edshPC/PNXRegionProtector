@@ -55,14 +55,15 @@ public interface DataProvider { //TODO unity flags and region info into one file
                 case "yaml":
                 case "yml":
                     return YAML;
-                case "mysql":
-                    return MYSQL;
-                case "sqlite":
-                case "sqlite3":
-                    return SQLite;
-                case "postgresql":
-                case "postgres":
-                    return POSTGRESQL;
+
+//                case "mysql":
+//                    return MYSQL;   TODO: database fix
+//                case "sqlite":
+//                case "sqlite3":
+//                    return SQLite;
+//                case "postgresql":
+//                case "postgres":
+//                    return POSTGRESQL;
             }
             return UNSUPPORTED;
         }

@@ -1,6 +1,6 @@
 package Sergey_Dertan.SRegionProtector.UI.Form.Type;
 
-import Sergey_Dertan.SRegionProtector.Main.PNXRegionProtectorMain;
+import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
 import Sergey_Dertan.SRegionProtector.UI.Form.Element.Button;
@@ -9,7 +9,7 @@ import cn.nukkit.form.window.FormWindowSimple;
 
 final class OwnerRemoveForm extends FormWindowSimple implements UIForm {
 
-    private static final transient RegionManager regionManager = PNXRegionProtectorMain.getInstance().getRegionManager();
+    private static final transient RegionManager regionManager = SRegionProtectorMain.getInstance().getRegionManager();
     private final transient Region region;
 
     OwnerRemoveForm(String owner, Region region, Player player) {

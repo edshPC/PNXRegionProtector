@@ -1,6 +1,6 @@
 package Sergey_Dertan.SRegionProtector.Command.Admin;
 
-import Sergey_Dertan.SRegionProtector.Main.PNXRegionProtectorMain;
+import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
 import Sergey_Dertan.SRegionProtector.Command.SRegionProtectorCommand;
 import Sergey_Dertan.SRegionProtector.Provider.DataProvider;
 import cn.nukkit.command.CommandSender;
@@ -13,9 +13,9 @@ import java.util.Map;
 
 public final class MigrateCommand extends SRegionProtectorCommand {
 
-    private final PNXRegionProtectorMain main;
+    private final SRegionProtectorMain main;
 
-    public MigrateCommand(PNXRegionProtectorMain main) {
+    public MigrateCommand(SRegionProtectorMain main) {
         super("rgmigrate", "migrate");
         this.main = main;
 

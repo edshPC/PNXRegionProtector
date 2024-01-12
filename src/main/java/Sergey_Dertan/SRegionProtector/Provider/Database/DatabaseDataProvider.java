@@ -1,6 +1,6 @@
 package Sergey_Dertan.SRegionProtector.Provider.Database;
 
-import Sergey_Dertan.SRegionProtector.Main.PNXRegionProtectorMain;
+import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Provider.DataObject.Converter;
 import Sergey_Dertan.SRegionProtector.Provider.DataObject.FlagListDataObject;
@@ -34,7 +34,7 @@ public abstract class DatabaseDataProvider implements DataProvider {
                 this.nucleusContext.getMetaDataManager().setDefaultNullable(this.getConfiguration().getBooleanProperty("datanucleus.metadata.defaultNullable"));
                 if (pumd != null) {
                     try {
-                        this.nucleusContext.getMetaDataManager().loadPersistenceUnit(pumd, PNXRegionProtectorMain.class.getClassLoader());
+                        this.nucleusContext.getMetaDataManager().loadPersistenceUnit(pumd, SRegionProtectorMain.class.getClassLoader());
                         if (pumd.getValidationMode() != null) {
                             this.getConfiguration().setProperty("datanucleus.validation.mode", pumd.getValidationMode());
                         }
@@ -61,7 +61,7 @@ public abstract class DatabaseDataProvider implements DataProvider {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
+    //@SuppressWarnings("unchecked")
     public List<RegionDataObject> loadRegionList() {
         Query<RegionDataObject> query = this.pm.newQuery(RegionDataObject.class);
         Collection<RegionDataObject> result = ((Collection<RegionDataObject>) query.execute());

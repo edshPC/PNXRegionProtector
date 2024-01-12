@@ -1,6 +1,6 @@
 package Sergey_Dertan.SRegionProtector.UI.Form;
 
-import Sergey_Dertan.SRegionProtector.Main.PNXRegionProtectorMain;
+import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
 import Sergey_Dertan.SRegionProtector.UI.Form.Type.UIForm;
@@ -13,7 +13,7 @@ import cn.nukkit.form.window.FormWindow;
 
 public abstract class FormUIManager {
 
-    private static final RegionManager REGION_MANAGER = PNXRegionProtectorMain.getInstance().getRegionManager();
+    private static final RegionManager REGION_MANAGER = SRegionProtectorMain.getInstance().getRegionManager();
 
     public static void open(Player target, Region region) {
         target.showFormWindow((FormWindow) UIForm.getInstance(UIForm.MAIN, region, target));

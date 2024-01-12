@@ -1,6 +1,6 @@
 package Sergey_Dertan.SRegionProtector.Settings;
 
-import Sergey_Dertan.SRegionProtector.Main.PNXRegionProtectorMain;
+import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Provider.DataProvider;
 import Sergey_Dertan.SRegionProtector.UI.UIType;
@@ -62,11 +62,11 @@ public final class Settings {
     public final double pricePerBlock;
 
     public Settings() throws Exception {
-        Utils.copyResource("config.yml", "resources/", PNXRegionProtectorMain.MAIN_FOLDER, PNXRegionProtectorMain.class);
-        Utils.copyResource("mysql.yml", "resources/db", PNXRegionProtectorMain.DB_FOLDER, PNXRegionProtectorMain.class);
-        Utils.copyResource("postgresql.yml", "resources/db", PNXRegionProtectorMain.DB_FOLDER, PNXRegionProtectorMain.class);
-        Utils.copyResource("sqlite.yml", "resources/db", PNXRegionProtectorMain.DB_FOLDER, PNXRegionProtectorMain.class);
-        Utils.copyResource("region-settings.yml", "resources/", PNXRegionProtectorMain.MAIN_FOLDER, PNXRegionProtectorMain.class);
+        Utils.copyResource("config.yml", "resources/", SRegionProtectorMain.MAIN_FOLDER, SRegionProtectorMain.class);
+        Utils.copyResource("mysql.yml", "resources/db", SRegionProtectorMain.DB_FOLDER, SRegionProtectorMain.class);
+        Utils.copyResource("postgresql.yml", "resources/db", SRegionProtectorMain.DB_FOLDER, SRegionProtectorMain.class);
+        Utils.copyResource("sqlite.yml", "resources/db", SRegionProtectorMain.DB_FOLDER, SRegionProtectorMain.class);
+        Utils.copyResource("region-settings.yml", "resources/", SRegionProtectorMain.MAIN_FOLDER, SRegionProtectorMain.class);
 
         Map<String, Object> config = this.getConfig();
 
@@ -119,6 +119,8 @@ public final class Settings {
         this.borderBlock = Block.get(id, meta);
 
         this.provider = DataProvider.Type.fromString((String) config.get("provider"));
+        if (this.provider.equals(DataProvider.Type.UNSUPPORTED))
+            throw new RuntimeException("Wrong data provider!");
 
         Object wand = config.get("wand-item");
         if (wand instanceof String) {
@@ -138,15 +140,15 @@ public final class Settings {
 
         this.wandItem = Item.get(id, meta);
 
-        this.mySQLSettings = new MySQLSettings(new Config(PNXRegionProtectorMain.DB_FOLDER + "mysql.yml", Config.YAML).getAll());
-        this.postgreSQLSettings = new PostgreSQLSettings(new Config(PNXRegionProtectorMain.DB_FOLDER + "postgresql.yml", Config.YAML).getAll());
-        this.sqliteSettngs = new SQLiteSettings(new Config(PNXRegionProtectorMain.DB_FOLDER + "sqlite.yml", Config.YAML).getString("database-file"));
+        this.mySQLSettings = new MySQLSettings(new Config(SRegionProtectorMain.DB_FOLDER + "mysql.yml", Config.YAML).getAll());
+        this.postgreSQLSettings = new PostgreSQLSettings(new Config(SRegionProtectorMain.DB_FOLDER + "postgresql.yml", Config.YAML).getAll());
+        this.sqliteSettngs = new SQLiteSettings(new Config(SRegionProtectorMain.DB_FOLDER + "sqlite.yml", Config.YAML).getString("database-file"));
 
-        this.regionSettings = new RegionSettings(config, new Config(PNXRegionProtectorMain.MAIN_FOLDER + "region-settings.yml", Config.YAML).getAll());
+        this.regionSettings = new RegionSettings(config, new Config(SRegionProtectorMain.MAIN_FOLDER + "region-settings.yml", Config.YAML).getAll());
     }
 
     @SuppressWarnings("WeakerAccess")
     public Map<String, Object> getConfig() {
-        return new Config(PNXRegionProtectorMain.MAIN_FOLDER + "config.yml", Config.YAML).getAll();
+        return new Config(SRegionProtectorMain.MAIN_FOLDER + "config.yml", Config.YAML).getAll();
     }
 }

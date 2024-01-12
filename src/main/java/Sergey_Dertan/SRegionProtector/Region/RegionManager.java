@@ -1,7 +1,7 @@
 package Sergey_Dertan.SRegionProtector.Region;
 
 import Sergey_Dertan.SRegionProtector.BlockEntity.BlockEntityHealer;
-import Sergey_Dertan.SRegionProtector.Main.PNXRegionProtectorMain;
+import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Region.Chunk.Chunk;
 import Sergey_Dertan.SRegionProtector.Region.Chunk.ChunkManager;
@@ -245,7 +245,7 @@ public final class RegionManager {
         return this.regions.get(name);
     }
 
-    public synchronized void save(PNXRegionProtectorMain.SaveType saveType, String initiator) {
+    public synchronized void save(SRegionProtectorMain.SaveType saveType, String initiator) {
         AtomicInteger amount = new AtomicInteger();
         this.regions.values().stream().filter(Region::needUpdate).forEach(region -> {
             synchronized (region.lock) {
@@ -267,7 +267,7 @@ public final class RegionManager {
         }
     }
 
-    public synchronized void save(PNXRegionProtectorMain.SaveType saveType) {
+    public synchronized void save(SRegionProtectorMain.SaveType saveType) {
         this.save(saveType, null);
     }
 
