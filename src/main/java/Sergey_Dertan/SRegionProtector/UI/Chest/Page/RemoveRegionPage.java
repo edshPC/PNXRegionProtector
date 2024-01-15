@@ -61,7 +61,7 @@ public final class RemoveRegionPage implements Page {
 
     @Override
     public boolean hasPermission(Player player, Region region) {
-        return player.hasPermission("sregionprotector.admin") || region.isCreator(player.getName());
+        return player.hasPermission("sregionprotector.admin") || region.isCreator(player);
     }
 
     @Override

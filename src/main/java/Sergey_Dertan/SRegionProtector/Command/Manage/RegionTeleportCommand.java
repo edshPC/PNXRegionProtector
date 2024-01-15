@@ -50,7 +50,7 @@ public final class RegionTeleportCommand extends SRegionProtectorCommand {
             this.messenger.sendMessage(sender, "command.teleport.region-doesnt-exists");
             return false;
         }
-        if (!sender.hasPermission("sregionprotector.admin") && !region.isLivesIn(sender.getName().toLowerCase())) {
+        if (!sender.hasPermission("sregionprotector.admin") && !region.isLivesIn(sender.asPlayer())) {
             this.messenger.sendMessage(sender, "command.teleport.permission");
             return false;
         }

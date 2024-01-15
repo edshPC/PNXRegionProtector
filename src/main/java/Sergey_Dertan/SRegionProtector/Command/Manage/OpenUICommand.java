@@ -67,7 +67,7 @@ public final class OpenUICommand extends SRegionProtectorCommand {
     }
 
     private void openUI(Player player, Region region) {
-        if (!region.isLivesIn(player.getName()) && !player.hasPermission("sregionprotector.info.other") && !player.hasPermission("sregionprotector.admin")) {
+        if (!region.isLivesIn(player) && !player.hasPermission("sregionprotector.info.other") && !player.hasPermission("sregionprotector.admin")) {
             this.messenger.sendMessage(player, "command.gui.permission");
             return;
         }

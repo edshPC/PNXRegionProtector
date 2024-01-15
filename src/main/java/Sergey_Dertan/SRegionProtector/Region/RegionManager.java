@@ -12,6 +12,7 @@ import Sergey_Dertan.SRegionProtector.Provider.DataProvider;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
 import cn.nukkit.Player;
+import cn.nukkit.Server;
 import cn.nukkit.level.Level;
 import cn.nukkit.math.AxisAlignedBB;
 import cn.nukkit.math.SimpleAxisAlignedBB;
@@ -37,12 +38,14 @@ public final class RegionManager {
     private final Map<String, Set<Region>> owners;
     private final Map<String, Set<Region>> members;
     private final Messenger messenger;
+    public final Server server;
 
     public RegionManager(DataProvider provider, Logger logger, ChunkManager chunkManager) {
         this.provider = provider;
         this.logger = logger;
         this.chunkManager = chunkManager;
         this.messenger = Messenger.getInstance();
+        this.server = SRegionProtectorMain.getInstance().getServer();
 
         this.regions = new Object2ObjectAVLTreeMap<>(String.CASE_INSENSITIVE_ORDER);
         this.owners = new Object2ObjectAVLTreeMap<>(String.CASE_INSENSITIVE_ORDER);
@@ -114,7 +117,7 @@ public final class RegionManager {
         this.logger.info(TextFormat.GREEN + this.messenger.getMessage("loading.success", new String[]{"@regions", "@chunks"}, new String[]{Integer.toString(this.regions.size()), Integer.toString(this.chunkManager.getChunkAmount())}));
     }
 
-    public synchronized Region createRegion(String name, String creator, Vector3 pos1, Vector3 pos2, Level level) {
+    private synchronized Region createRegion(String name, String creator, Vector3 pos1, Vector3 pos2, Level level) {
         if (this.regions.containsKey(name)) return null;
         double minX = Math.min(pos1.x, pos2.x);
         double minY = Math.min(pos1.y, pos2.y);
@@ -143,6 +146,10 @@ public final class RegionManager {
         return region;
     }
 
+    public Region createRegion(String name, Player creator, Vector3 pos1, Vector3 pos2, Level level) {
+        return createRegion(name, creator.getUniqueId().toString(), pos1, pos2, level);
+    }
+
     private synchronized void clearUsers(Region region) {
         synchronized (region.lock) {
             region.getMembers().forEach(member ->
@@ -164,7 +171,7 @@ public final class RegionManager {
         }
     }
 
-    public synchronized void changeRegionOwner(Region region, String newOwner) {
+    private synchronized void changeRegionOwner(Region region, String newOwner) {
         synchronized (region.lock) {
             this.clearUsers(region);
 
@@ -175,6 +182,10 @@ public final class RegionManager {
             region.setSellFlagState(-1L, false);
         }
     }
+    public void changeRegionOwner(Region region, Player newOwner) {
+        changeRegionOwner(region, newOwner.getUniqueId().toString());
+    }
+
 
     public synchronized void removeRegion(Region region) {
         synchronized (region.lock) {
@@ -189,7 +200,7 @@ public final class RegionManager {
         }
     }
 
-    public boolean checkOverlap(Vector3 pos1, Vector3 pos2, String level, String creator, boolean checkSellFlag, Region self) {
+    public boolean checkOverlap(Vector3 pos1, Vector3 pos2, String level, Player creator, boolean checkSellFlag, Region self) {
         AxisAlignedBB bb = new SimpleAxisAlignedBB(pos1, pos2);
 
         for (Chunk chunk : this.chunkManager.getRegionChunks(pos1, pos2, level, false)) {
@@ -203,26 +214,32 @@ public final class RegionManager {
         return false;
     }
 
-    public boolean checkOverlap(Vector3 pos1, Vector3 pos2, String level, String creator, boolean checkSellFlag) {
+    public boolean checkOverlap(Vector3 pos1, Vector3 pos2, String level, Player creator, boolean checkSellFlag) {
         return this.checkOverlap(pos1, pos2, level, creator, checkSellFlag, null);
     }
 
-    public boolean checkOverlap(Vector3 pos1, Vector3 pos2, String level, String creator) {
+    public boolean checkOverlap(Vector3 pos1, Vector3 pos2, String level, Player creator) {
         return this.checkOverlap(pos1, pos2, level, creator, false);
     }
 
-    public synchronized void addMember(Region region, String target) {
+    private synchronized void addMember(Region region, String target) {
         synchronized (region.lock) {
             this.members.computeIfAbsent(target, (usr) -> new ObjectArraySet<>()).add(region);
             region.addMember(target);
         }
     }
+    public void addMember(Region region, Player target) {
+        addMember(region, target.getUniqueId().toString());
+    }
 
-    public synchronized void addOwner(Region region, String target) {
+    private synchronized void addOwner(Region region, String target) {
         synchronized (region.lock) {
             this.owners.computeIfAbsent(target, (usr) -> new ObjectArraySet<>()).add(region);
             region.addOwner(target);
         }
+    }
+    public void addOwner(Region region, Player target) {
+        addOwner(region, target.getUniqueId().toString());
     }
 
     public synchronized void removeOwner(Region region, String target) {
@@ -232,6 +249,9 @@ public final class RegionManager {
             region.removeOwner(target);
         }
     }
+    public void removeOwner(Region region, Player target) {
+        removeOwner(region, target.getUniqueId().toString());
+    }
 
     public synchronized void removeMember(Region region, String target) {
         synchronized (region.lock) {
@@ -239,6 +259,9 @@ public final class RegionManager {
             if (this.members.get(target).size() == 0) this.members.remove(target);
             region.removeMember(target);
         }
+    }
+    public void removeMember(Region region, Player target) {
+        removeMember(region, target.getUniqueId().toString());
     }
 
     public synchronized Region getRegion(String name) {
@@ -273,13 +296,14 @@ public final class RegionManager {
     }
 
     public synchronized List<Region> getPlayersRegionList(Player player, RegionGroup group) {
+        String uuid = player.getUniqueId().toString();
         switch (group) {
             case CREATOR:
-                return this.owners.getOrDefault(player.getName(), Collections.emptySet()).stream().filter(region -> region.isCreator(player.getName())).collect(Collectors.toList());
+                return this.owners.getOrDefault(uuid, Collections.emptySet()).stream().filter(region -> region.isCreator(player)).collect(Collectors.toList());
             case OWNER:
-                return new ArrayList<>(this.owners.getOrDefault(player.getName(), Collections.emptySet()));
+                return new ArrayList<>(this.owners.getOrDefault(uuid, Collections.emptySet()));
             case MEMBER:
-                return new ArrayList<>(this.members.getOrDefault(player.getName(), Collections.emptySet()));
+                return new ArrayList<>(this.members.getOrDefault(uuid, Collections.emptySet()));
             default:
                 return Collections.emptyList();
         }

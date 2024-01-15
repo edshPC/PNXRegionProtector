@@ -29,7 +29,7 @@ final class MainForm extends FormWindowSimple implements UIForm {
         this.addButton(new Button("Owners", OwnersForm.class, region, player).setImage(ownersImage));
         this.addButton(new Button("Members", MembersForm.class, region, player).setImage(membersImage));
         this.addButton(new Button("Flags", FlagsForm.class, region, player).setImage(flagsImage));
-        if (player.hasPermission("sregionprotector.admin") || this.region.isCreator(player.getName())) {
+        if (player.hasPermission("sregionprotector.admin") || this.region.isCreator(player)) {
             this.addButton(new Button("Sell region", SellRegionForm.class, region).setImage(sellImage));
             this.addButton(new Button("Set priority", SetPriorityForm.class, region).setImage(priorityImage));
             this.addButton(new Button("Remove region", RemoveRegionForm.class, region, player).setImage(removeImage));

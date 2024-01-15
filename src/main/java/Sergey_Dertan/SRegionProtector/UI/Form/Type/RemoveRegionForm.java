@@ -22,7 +22,7 @@ final class RemoveRegionForm extends FormWindowSimple implements UIForm {
         this.region = region;
 
         this.addButton(new Button("Yes", null).setBeforeNext(() -> { //make sure that player still region`s owner
-            if (REGION_MANAGER.regionExists(region.name) && (player.hasPermission("sregionprotector.admin") || this.region.isCreator(player.getName()))) {
+            if (REGION_MANAGER.regionExists(region.name) && (player.hasPermission("sregionprotector.admin") || this.region.isCreator(player))) {
                 REGION_MANAGER.removeRegion(region);
                 player.sendMessage("Region " + region.name + " removed");
             }

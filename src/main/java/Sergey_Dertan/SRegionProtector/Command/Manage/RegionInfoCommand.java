@@ -6,6 +6,7 @@ import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
 import Sergey_Dertan.SRegionProtector.Settings.RegionSettings;
+import cn.nukkit.IPlayer;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParamType;
@@ -16,6 +17,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public final class RegionInfoCommand extends SRegionProtectorCommand {
 
@@ -68,16 +70,16 @@ public final class RegionInfoCommand extends SRegionProtectorCommand {
 
     private void showRegionInfo(CommandSender sender, Region region) {
         if (sender instanceof Player && !region.isSelling()) {
-            if (!region.isLivesIn(sender.getName()) && !sender.hasPermission("sregionprotector.info.other") && !sender.hasPermission("sregionprotector.admin")) {
+            if (!region.isLivesIn(sender.asPlayer()) && !sender.hasPermission("sregionprotector.info.other") && !sender.hasPermission("sregionprotector.admin")) {
                 this.messenger.sendMessage(sender, "command.info.region-permission");
                 return;
             }
         }
         String name = region.name;
         String level = region.level;
-        String owner = region.getCreator();
-        String owners = String.join(", ", region.getOwners());
-        String members = String.join(", ", region.getMembers());
+        String owner = getNameByUUID(region.getCreator());
+        String owners = String.join(", ", region.getOwners().stream().map(this::getNameByUUID).toList());
+        String members = String.join(", ", region.getMembers().stream().map(this::getNameByUUID).toList());
         String size = Long.toString(region.size);
         List<String> flags = new ObjectArrayList<>();
         for (int i = 0; i < RegionFlags.FLAG_AMOUNT; ++i) {
@@ -90,4 +92,11 @@ public final class RegionInfoCommand extends SRegionProtectorCommand {
                 new String[]{name, owner, level, owners, members, String.join(", ", flags), size, Integer.toString(region.getPriority())}
         );
     }
+
+    private String getNameByUUID(String uuid) {
+        IPlayer pl = regionManager.server.getOfflinePlayer(UUID.fromString(uuid));
+        if (pl == null) return "unknown";
+        return pl.getName();
+    }
+
 }

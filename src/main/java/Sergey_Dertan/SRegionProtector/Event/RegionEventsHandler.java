@@ -541,7 +541,7 @@ public final class RegionEventsHandler implements Listener {
                     continue;
                 }
             }
-            return region.isLivesIn(player.getName()) || player.hasPermission("sregionprotector.admin");
+            return region.isLivesIn(player) || player.hasPermission("sregionprotector.admin");
         }
         return false;
     }
@@ -552,7 +552,7 @@ public final class RegionEventsHandler implements Listener {
         Chunk chunk = this.chunkManager.getChunk((long) pos.x >> 4, (long) pos.z >> 4, pos.level.getName(), false, false);
         if (chunk == null) return;
         for (Region region : chunk.getRegions()) {
-            if (!region.isVectorInside(pos) || (liquidSource != null && region.isVectorInside(liquidSource)) || (mustBeMember && (player != null && region.isLivesIn(player.getName())))) {
+            if (!region.isVectorInside(pos) || (liquidSource != null && region.isVectorInside(liquidSource)) || (mustBeMember && (player != null && region.isLivesIn(player)))) {
                 continue;
             }
             if (!region.getFlagState(flag)) {

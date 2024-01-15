@@ -25,7 +25,7 @@ public final class OwnersPage implements Page {
     public Map<Integer, Item> getItems(Region region, int page) {
         Map<Integer, Item> list = new HashMap<>(NAVIGATORS_CACHE);
         int counter = 0;
-        for (String owner : region.getOwners().stream().skip(page * 18).limit(18).collect(Collectors.toList())) {
+        for (String owner : region.getOwners().stream().skip(page * 18L).limit(18).toList()) {
             Item item = Item.get(ItemID.SKULL, 3).
                     setCustomName(Messenger.getInstance().getMessage("gui.owners.owner-name", "@owner", owner)).
                     setLore(Messenger.getInstance().getMessage("gui.owners.owner-lore"));
@@ -44,6 +44,7 @@ public final class OwnersPage implements Page {
     public boolean handle(Item item, Region region, Player player) {
         if (!this.hasPermission(player, region)) return false;
         String target = item.getNamedTag().getString(Tags.TARGET_NAME_TAG);
+
         if (target.isEmpty() || !region.isOwner(target)) return false;
         this.regionManager.removeOwner(region, target);
         return true;
@@ -56,7 +57,7 @@ public final class OwnersPage implements Page {
 
     @Override
     public boolean hasPermission(Player player, Region region) {
-        return player.hasPermission("sregionprotector.admin") || region.isCreator(player.getName());
+        return player.hasPermission("sregionprotector.admin") || region.isCreator(player);
     }
 
     @Override

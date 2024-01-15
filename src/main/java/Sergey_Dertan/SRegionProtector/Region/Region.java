@@ -8,6 +8,7 @@ import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionSellFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionTeleportFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
+import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.AxisAlignedBB;
@@ -198,20 +199,32 @@ public final class Region implements AxisAlignedBB {
         return owners;
     }
 
-    public boolean isOwner(String player, boolean creator) {
+    private boolean isOwner(String player, boolean creator) {
         return this.owners.contains(player) || (creator && this.creator.equalsIgnoreCase(player));
     }
+    public boolean isOwner(Player player, boolean creator) {
+        return isOwner(player.getUniqueId().toString(), creator);
+    }
 
-    public boolean isOwner(String player) {
+    public boolean isOwner(String uuid) {
+        return this.isOwner(uuid, false);
+    }
+    public boolean isOwner(Player player) {
         return this.isOwner(player, false);
     }
 
-    public boolean isCreator(String player) {
+    private boolean isCreator(String player) {
         return this.creator.equalsIgnoreCase(player);
+    }
+    public boolean isCreator(Player player) {
+        return isCreator(player.getUniqueId().toString());
     }
 
     public boolean isMember(String player) {
         return this.members.contains(player);
+    }
+    public boolean isMember(Player player) {
+        return isMember(player.getUniqueId().toString());
     }
 
     void removeOwner(String player) {
@@ -306,8 +319,11 @@ public final class Region implements AxisAlignedBB {
         return new SimpleAxisAlignedBB(this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ);
     }
 
-    public boolean isLivesIn(String target) {
+    private boolean isLivesIn(String target) {
         return this.creator.equalsIgnoreCase(target) || this.owners.contains(target) || this.members.contains(target);
+    }
+    public boolean isLivesIn(Player target) {
+        return isLivesIn(target.getUniqueId().toString());
     }
 
     public Position getHealerPosition() {

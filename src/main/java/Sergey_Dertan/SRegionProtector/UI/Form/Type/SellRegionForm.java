@@ -33,7 +33,7 @@ final class SellRegionForm extends FormWindowCustom implements UIForm {
 
     @Override
     public UIForm handle(FormResponse response, Player player) {
-        if (!player.hasPermission("sregionprotector.admin") && !this.region.isCreator(player.getName())) return null;
+        if (!player.hasPermission("sregionprotector.admin") && !this.region.isCreator(player)) return null;
         long price;
         try {
             String priceStr = ((FormResponseCustom) response).getInputResponse(0);

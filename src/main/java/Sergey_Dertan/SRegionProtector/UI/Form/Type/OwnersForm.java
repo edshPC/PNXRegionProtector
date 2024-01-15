@@ -13,7 +13,7 @@ final class OwnersForm extends FormWindowSimple implements UIForm {
         super(region.name + "'s owners", "");
         this.region = region;
 
-        if (player.hasPermission("sregionprotector.admin") || this.region.isCreator(player.getName())) {
+        if (player.hasPermission("sregionprotector.admin") || this.region.isCreator(player)) {
             region.getOwners().forEach(owner -> this.addButton(new Button(owner, OwnerRemoveForm.class, owner, region, player)));
         } else {
             region.getOwners().forEach(owner -> this.addButton(new Button(owner, OwnersForm.class, region, player)));

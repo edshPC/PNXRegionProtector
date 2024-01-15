@@ -50,7 +50,7 @@ public final class RegionSelectCommand extends SRegionProtectorCommand {
             this.messenger.sendMessage(sender, "command.select.region-doesnt-exists", "@region", args[0]);
             return false;
         }
-        if (!region.isLivesIn(sender.getName()) && !sender.hasPermission("sregionprotector.region.select-other") && !region.isSelling()) {
+        if (!region.isLivesIn(sender.asPlayer()) && !sender.hasPermission("sregionprotector.region.select-other") && !region.isSelling()) {
             this.messenger.sendMessage(sender, "command.select.permission");
             return false;
         }

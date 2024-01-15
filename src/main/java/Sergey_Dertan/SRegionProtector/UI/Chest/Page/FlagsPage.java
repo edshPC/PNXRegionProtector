@@ -113,7 +113,7 @@ public final class FlagsPage implements Page {
 
     @Override
     public boolean hasPermission(Player player, Region region) {
-        return player.hasPermission("sregionprotector.admin") || region.isOwner(player.getName(), true);
+        return player.hasPermission("sregionprotector.admin") || region.isOwner(player, true);
     }
 
     @Override

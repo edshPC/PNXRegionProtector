@@ -81,6 +81,8 @@ public final class SRegionProtectorMain extends PluginBase {
         LANG_FOLDER = MAIN_FOLDER + "Lang/";
         DB_FOLDER = MAIN_FOLDER + "DB/";
 
+        instance = this;
+
         if (!this.createDirectories()) return;
         if (!this.initMessenger()) return;
 
@@ -109,8 +111,6 @@ public final class SRegionProtectorMain extends PluginBase {
         this.gc();
 
         this.getServer().getScheduler().scheduleTask(this, this::checkUpdate, true);
-
-        instance = this;
 
         this.registerPlaceholders();
     }

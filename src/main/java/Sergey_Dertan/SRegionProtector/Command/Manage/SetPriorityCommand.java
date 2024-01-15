@@ -44,7 +44,7 @@ public final class SetPriorityCommand extends SRegionProtectorCommand {
             this.messenger.sendMessage(sender, "command.set-priority.wrong-target");
             return false;
         }
-        if (sender instanceof Player && !sender.hasPermission("sregionprotector.admin") && region.isCreator(sender.getName())) {
+        if (sender instanceof Player && !sender.hasPermission("sregionprotector.admin") && region.isCreator(sender.asPlayer())) {
             this.messenger.sendMessage(sender, "command.set-priority.permission");
             return false;
         }

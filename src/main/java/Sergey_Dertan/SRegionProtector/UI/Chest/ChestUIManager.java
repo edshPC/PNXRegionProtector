@@ -39,7 +39,7 @@ public abstract class ChestUIManager {
         Inventory inventory = inventories.get(player.getLoaderId());
         if (inventory == null) return;
         Region region = inventories.get(player.getLoaderId()).region;
-        if (!region.isLivesIn(player.getName()) && !player.hasPermission("sregionprotector.info.other") && !player.hasPermission("sregionprotector.admin")) {
+        if (!region.isLivesIn(player) && !player.hasPermission("sregionprotector.info.other") && !player.hasPermission("sregionprotector.admin")) {
             removeChest(player, (Vector3) inventories.remove(player.getLoaderId()).getHolder());
             return;
         }
