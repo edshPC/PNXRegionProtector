@@ -3,7 +3,7 @@ main: Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain
 api: [1.0.0]
 version: "${pom.version}"
 author: Sergey_Dertan & ed_sh
-website: http://t.me/Sergey57ss
+website: https://github.com/edshPC/PNXRegionProtector
 load: STARTUP
 prefix: '§ePNXRegionProtector§f'
 softdepend:

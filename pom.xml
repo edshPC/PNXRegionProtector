@@ -65,7 +65,7 @@
         <dependency>
             <groupId>cn.powernukkitx</groupId>
             <artifactId>powernukkitx</artifactId>
-            <version>1.20.30-r2</version>
+            <version>1.20.40-r1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -198,7 +198,7 @@
                     <transformers>
                         <transformer
                                 implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                            <mainClass>Main.edsh.PNXRegionProtector.SRegionProtectorMain</mainClass>
+                            <mainClass>Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain</mainClass>
                         </transformer>
                     </transformers>
                     <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml
