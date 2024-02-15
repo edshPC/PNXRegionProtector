@@ -117,7 +117,7 @@ public final class RegionManager {
         this.logger.info(TextFormat.GREEN + this.messenger.getMessage("loading.success", new String[]{"@regions", "@chunks"}, new String[]{Integer.toString(this.regions.size()), Integer.toString(this.chunkManager.getChunkAmount())}));
     }
 
-    private synchronized Region createRegion(String name, String creator, Vector3 pos1, Vector3 pos2, Level level) {
+    public synchronized Region createRegion(String name, String creatorUUID, Vector3 pos1, Vector3 pos2, Level level) {
         if (this.regions.containsKey(name)) return null;
         double minX = Math.min(pos1.x, pos2.x);
         double minY = Math.min(pos1.y, pos2.y);
@@ -127,13 +127,13 @@ public final class RegionManager {
         double maxY = Math.max(pos1.y, pos2.y);
         double maxZ = Math.max(pos1.z, pos2.z);
 
-        Region region = new Region(name, creator, level.getName(), minX, minY, minZ, maxX, maxY, maxZ);
+        Region region = new Region(name, creatorUUID, level.getName(), minX, minY, minZ, maxX, maxY, maxZ);
 
         this.chunkManager.getRegionChunks(pos1, pos2, level.getName(), true).forEach(chunk -> {
             chunk.addRegion(region);
             region.addChunk(chunk);
         });
-        this.owners.computeIfAbsent(creator, (s) -> new ObjectArraySet<>()).add(region);
+        this.owners.computeIfAbsent(creatorUUID, (s) -> new ObjectArraySet<>()).add(region);
         this.regions.put(name, region);
 
         Vector3 pos = region.getHealerVector();
@@ -222,31 +222,31 @@ public final class RegionManager {
         return this.checkOverlap(pos1, pos2, level, creator, false);
     }
 
-    private synchronized void addMember(Region region, String target) {
+    public synchronized void addMember(Region region, String targetUUID) {
         synchronized (region.lock) {
-            this.members.computeIfAbsent(target, (usr) -> new ObjectArraySet<>()).add(region);
-            region.addMember(target);
+            this.members.computeIfAbsent(targetUUID, (usr) -> new ObjectArraySet<>()).add(region);
+            region.addMember(targetUUID);
         }
     }
     public void addMember(Region region, Player target) {
         addMember(region, target.getUniqueId().toString());
     }
 
-    private synchronized void addOwner(Region region, String target) {
+    public synchronized void addOwner(Region region, String targetUUID) {
         synchronized (region.lock) {
-            this.owners.computeIfAbsent(target, (usr) -> new ObjectArraySet<>()).add(region);
-            region.addOwner(target);
+            this.owners.computeIfAbsent(targetUUID, (usr) -> new ObjectArraySet<>()).add(region);
+            region.addOwner(targetUUID);
         }
     }
     public void addOwner(Region region, Player target) {
         addOwner(region, target.getUniqueId().toString());
     }
 
-    public synchronized void removeOwner(Region region, String target) {
+    public synchronized void removeOwner(Region region, String targetUUID) {
         synchronized (region.lock) {
-            this.owners.get(target).remove(region);
-            if (this.owners.get(target).size() == 0) this.owners.remove(target);
-            region.removeOwner(target);
+            this.owners.get(targetUUID).remove(region);
+            if (this.owners.get(targetUUID).size() == 0) this.owners.remove(targetUUID);
+            region.removeOwner(targetUUID);
         }
     }
     public void removeOwner(Region region, Player target) {

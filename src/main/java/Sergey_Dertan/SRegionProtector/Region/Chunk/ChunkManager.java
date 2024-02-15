@@ -65,7 +65,8 @@ public final class ChunkManager {
                     ++amount;
                 }
             }
-            this.logger.info(TextFormat.GREEN + this.messenger.getMessage("chunk-manager.empty-chunks-removed", "@amount", Integer.toString(amount)));
+            if(amount > 0)
+                this.logger.info(TextFormat.GREEN + this.messenger.getMessage("chunk-manager.empty-chunks-removed", "@amount", Integer.toString(amount)));
         }
     }
 
